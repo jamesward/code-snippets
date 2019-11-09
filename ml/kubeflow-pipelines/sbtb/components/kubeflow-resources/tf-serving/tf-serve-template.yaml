@@ -18,9 +18,6 @@ metadata:
   namespace: KUBEFLOW_NAMESPACE
 spec:
   ports:
-  - name: grpc-tf-serving
-    port: 9000
-    targetPort: 9000
   - name: tf-serving-builtin-http
     port: 8500
     targetPort: 8500
@@ -43,40 +40,26 @@ spec:
         app: SERVICE_NAME
         version: v1
     spec:
-      volumes:
-      - name: gcp-credentials-user-gcp-sa
-        secret:
-          secretName: user-gcp-sa
       containers:
       - args:
-        - --port=9000
         - --rest_api_port=8500
         - --model_name=MODEL_NAME
         - --model_base_path=MODEL_PATH
         command:
         - /usr/bin/tensorflow_model_server
         image: tensorflow/serving
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /secret/gcp-credentials/user-gcp-sa.json
-        - name: CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
-          value: /secret/gcp-credentials/user-gcp-sa.json
-        volumeMounts:
-        - mountPath: /secret/gcp-credentials
-          name: gcp-credentials-user-gcp-sa
         imagePullPolicy: IfNotPresent
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 30
           tcpSocket:
-            port: 9000
+            port: 8500
         name: MODEL_NAME
         ports:
-        - containerPort: 9000
         - containerPort: 8500
         resources:
           limits:
-            cpu: "4"
+            cpu: "2"
             memory: 4Gi
           requests:
             cpu: "1"
