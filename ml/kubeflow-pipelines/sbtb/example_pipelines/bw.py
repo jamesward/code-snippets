@@ -29,7 +29,7 @@ train_op = comp.load_component_from_url(
   'https://raw.githubusercontent.com/amygdala/code-snippets/master/ml/kubeflow-pipelines/sbtb/components/train_component.yaml' # pylint: disable=line-too-long
   )
 serve_op = comp.load_component_from_url(
-  'https://raw.githubusercontent.com/amygdala/code-snippets/master/ml/kubeflow-pipelines/sbtb/components/serve_component.yaml' # pylint: disable=line-too-long
+  'https://raw.githubusercontent.com/jamesward/code-snippets/master/ml/kubeflow-pipelines/sbtb/components/serve_component.yaml' # pylint: disable=line-too-long
   )
 
 
@@ -51,13 +51,13 @@ def bikes_weather(  #pylint: disable=unused-argument
     workdir='%s/%s' % (working_dir, dsl.RUN_ID_PLACEHOLDER),
     epochs=epochs, steps_per_epoch=steps_per_epoch,
     load_checkpoint=load_checkpoint
-    ).apply(gcp.use_gcp_secret('user-gcp-sa'))
+    )
 
 
   serve = serve_op(
     model_path=train.outputs['train_output_path'],
     model_name='bikesw'
-    ).apply(gcp.use_gcp_secret('user-gcp-sa'))
+    )
 
   train.set_gpu_limit(1)
 
