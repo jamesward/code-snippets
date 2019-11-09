@@ -25,7 +25,7 @@ inputs:
     type: GCSPath
 implementation:
   container:
-    image: gcr.io/google-samples/ml-pipeline-tfserve:v2
+    image: gcr.io/cr-demo-235923/ml-pipeline-tfserve
     args: [
       --model_name, {inputValue: model_name},
       --model_path, {inputValue: model_path},
