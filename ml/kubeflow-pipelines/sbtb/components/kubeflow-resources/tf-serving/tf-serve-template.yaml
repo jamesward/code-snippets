@@ -18,6 +18,9 @@ metadata:
   namespace: KUBEFLOW_NAMESPACE
 spec:
   ports:
+  - name: grpc-tf-serving
+    port: 9000
+    targetPort: 9000
   - name: tf-serving-builtin-http
     port: 8500
     targetPort: 8500
@@ -42,6 +45,7 @@ spec:
     spec:
       containers:
       - args:
+        - --port=9000
         - --rest_api_port=8500
         - --model_name=MODEL_NAME
         - --model_base_path=MODEL_PATH
@@ -53,10 +57,10 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 30
           tcpSocket:
-            port: 8500
+            port: 9000
         name: MODEL_NAME
         ports:
-        - containerPort: 8500
+        - containerPort: 9000
         resources:
           limits:
             cpu: "2"
